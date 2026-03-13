@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ADIVINA EL NÚMERO</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Share+Tech+Mono&display=swap"
+      rel="stylesheet"/>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+
+  <body>
+    <div class="grid-bg" aria-hidden="true"></div>
+
+    <div class="wrapper">
+      <!--HEADER-->
+      <header>
+        <span class="title-tag">ARCADE</span>
+        <h1>ADIVINA EL <span>NÚMERO</span></h1>
+        <p class="subtitle">Poné a prueba tu intuición</p>
+      </header>
+
+      <!--DIFFICULTY-->
+      <div class="card" id="card-difficulty">
+        <div class="card-corner-tl"></div><div class="card-corner-br"></div>
+        <div class="card-label">Seleccionar dificultad</div>
+
+        <div class="difficulty-grid">
+          <button
+            class="diff-btn"
+            data-difficulty="easy"
+            data-min="1"
+            data-max="50"
+            data-max-attempts="10"
+            aria-pressed="false"
+          >
+            <span class="diff-icon">🟢</span>
+            FÁCIL
+            <span class="diff-range">1 – 50</span>
+          </button>
+
+          <button
+            class="diff-btn active"
+            data-difficulty="medium"
+            data-min="1"
+            data-max="100"
+            data-max-attempts="12"
+            aria-pressed="true"
+          >
+            <span class="diff-icon">🟡</span>
+            MEDIO
+            <span class="diff-range">1 – 100</span>
+          </button>
+
+          <button
+            class="diff-btn"
+            data-difficulty="hard"
+            data-min="1"
+            data-max="200"
+            data-max-attempts="15"
+            aria-pressed="false"
+          >
+            <span class="diff-icon">🔴</span>
+            DIFÍCIL
+            <span class="diff-range">1 – 200</span>
+          </button>
+        </div>
+      </div>
+
+      <!--GAME AREA-->
+      <section
+        class="game-area visible"
+        id="game-area"
+        aria-label="Área de juego"
+      >
+        <!-- Stats -->
+        <div class="card">
+          <div class="card-corner-tl"></div><div class="card-corner-br"></div>
+          <div class="stats-row">
+            <div class="stat-box">
+              <span class="stat-label">Intento</span>
+              <span class="stat-value" id="stat-attempt">0</span>
+            </div>
+            <div class="stat-box">
+              <span class="stat-label">Máx.</span>
+              <span class="stat-value" id="stat-max">8</span>
+            </div>
+            <div class="stat-box">
+              <span class="stat-label">Partidas</span>
+              <span class="stat-value" id="stat-games">0</span>
+            </div>
+          </div>
+
+          <div class="attempts-bar-wrap">
+            <div class="attempts-bar-label">
+              <span>INTENTOS USADOS</span>
+              <span id="bar-label">0 / 8</span>
+            </div>
+            <div
+              class="attempts-bar-track"
+              role="progressbar"
+              aria-label="Intentos usados"
+              aria-valuenow="0"
+              aria-valuemin="0"
+              aria-valuemax="8"
+            >
+              <div class="attempts-bar-fill" id="attempts-bar"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Range hint -->
+        <div class="card">
+          <div class="card-corner-tl"></div><div class="card-corner-br"></div>
+          <div class="card-label">Rango actual</div>
+          <div class="range-display" aria-live="polite">
+            <span class="range-min" id="range-low">1</span>
+            <span class="range-sep">━━━━━</span>
+            <span>¿?</span>
+            <span class="range-sep">━━━━━</span>
+            <span class="range-max" id="range-high">100</span>
+          </div>
+        </div>
+
+        <!-- Input -->
+        <div class="card">
+          <div class="card-corner-tl"></div><div class="card-corner-br"></div>
+          <div class="card-label">Tu apuesta</div>
+          <div class="input-row">
+            <input
+              type="number"
+              class="guess-input"
+              id="guess-input"
+              placeholder="INGRESA UN NÚMERO"
+              min="1"
+              max="100"
+              autocomplete="off"
+              aria-label="Ingresa tu número"
+            />
+            <button class="btn-guess" id="btn-guess">
+              <span>▶ ADIVINAR</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Feedback -->
+        <div class="card feedback" id="feedback" aria-live="assertive">
+          <div class="card-corner-tl"></div><div class="card-corner-br"></div>
+          <span class="feedback-icon" id="feedback-icon">🎮</span>
+          <span class="feedback-text" id="feedback-text">ELIGE LA DIFICULTAD Y COMIENZA</span>
+          <span class="feedback-sub" id="feedback-sub">↑ Ingresa tu primer número arriba</span>
+        </div>
+
+        <!-- History -->
+        <div class="card history-wrap" id="history-wrap">
+          <div class="card-corner-tl"></div><div class="card-corner-br"></div>
+          <div class="card-label">Historial de intentos</div>
+          <ul class="history-list" id="history-list" aria-label="Historial de intentos"></ul>
+        </div>
+
+        <!-- Action buttons -->
+        <div class="action-row">
+          <button class="btn-secondary" id="btn-restart">↺ NUEVA PARTIDA</button>
+          <button class="btn-secondary" id="btn-hint">💡 PISTA</button>
+        </div>
+      </section>
+
+      <!-- SCOREBOARD -->
+      <div class="card score-section" id="score-section">
+        <div class="card-corner-tl"></div><div class="card-corner-br"></div>
+        <div class="card-label">Marcador — mejores partidas</div>
+        <div class="score-grid" id="score-grid"></div>
+      </div>
+
+      <!-- FOOTER -->
+      <footer>
+        <p class="footer-text">
+          INSERT COIN TO CONTINUE <span class="footer-blink">█</span>
+        </p>
+        <p class="footer-text" style="margin-top: 0.4rem; opacity: 0.5">
+          HECHO POR MAURO LOPEZ 
+        </p>
+      </footer>
+    </div>
+    <script src="script.js"></script>
+  </body>
+</html>
